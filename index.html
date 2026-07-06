@@ -1,0 +1,1634 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>🦪 yangwenjing's park · 26岁生日特别版</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Quicksand:wght@400;600;700&display=swap" rel="stylesheet" />
+    <style>
+        /* ===== 全局重置 ===== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            user-select: none;
+        }
+
+        body {
+            font-family: 'Quicksand', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: #1a1420;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* ===== 所有页面容器 ===== */
+        .page {
+            position: fixed;
+            inset: 0;
+            width: 100vw;
+            height: 100vh;
+            transition: opacity 0.8s ease, transform 0.8s ease;
+            opacity: 0;
+            pointer-events: none;
+            transform: scale(0.96);
+            overflow: hidden;
+        }
+        .page.active {
+            opacity: 1;
+            pointer-events: auto;
+            transform: scale(1);
+            z-index: 10;
+        }
+        .page.exit {
+            opacity: 0;
+            transform: scale(0.92);
+        }
+
+        /* ============================================================
+              页面1: 加载页 — 纯文字，标题靠上
+            ============================================================ */
+        #loading-screen {
+            background: url('https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWtWdqS56h_ccB4j9Lzh2F6Tke5onsPwACXR0AAkj5WVY04O-u0Zz8AAE8BA.jpg') center center / cover no-repeat fixed;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            position: relative;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: crisp-edges;
+            -webkit-background-size: cover;
+            -moz-background-size: cover;
+            -o-background-size: cover;
+            background-size: cover;
+        }
+
+        /* 柔和遮罩 */
+        #loading-screen::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 50% 50%, rgba(0, 0, 0, 0.10) 0%, rgba(0, 0, 0, 0.35) 80%, rgba(0, 0, 0, 0.50) 100%);
+            backdrop-filter: blur(2px);
+            z-index: 1;
+        }
+
+        /* 额外光晕 */
+        #loading-screen::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(ellipse at 30% 40%, rgba(255, 215, 150, 0.06) 0%, transparent 60%),
+                radial-gradient(ellipse at 70% 60%, rgba(255, 200, 100, 0.04) 0%, transparent 50%);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* 浮动粒子 */
+        .particle-container {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            overflow: hidden;
+            z-index: 1;
+        }
+        .particle {
+            position: absolute;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.20);
+            box-shadow: 0 0 30px rgba(255, 255, 255, 0.05);
+            animation: floatParticle linear infinite;
+        }
+        @keyframes floatParticle {
+            0% {
+                transform: translateY(100vh) scale(0) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 0.6;
+            }
+            90% {
+                opacity: 0.6;
+            }
+            100% {
+                transform: translateY(-20vh) scale(1.2) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* ===== 加载内容 — 靠上布局 ===== */
+        .loading-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 22px;
+            padding: 30px 20px 30px;
+            width: 90%;
+            max-width: 620px;
+            background: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            border: none;
+            border-radius: 0;
+            box-shadow: none;
+            justify-content: flex-start;
+            margin-top: -40px;
+        }
+
+        .loading-title {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 4.2rem;
+            color: #fff;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.60), 0 0 60px rgba(255, 255, 255, 0.08);
+            letter-spacing: 4px;
+            text-align: center;
+            line-height: 1.15;
+            margin-top: -20px;
+        }
+
+        .loading-memories {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 2.4rem;
+            color: #fff;
+            text-shadow: 0 2px 30px rgba(0, 0, 0, 0.50);
+            letter-spacing: 3px;
+            animation: pulseText 2.5s ease-in-out infinite;
+            margin-top: -6px;
+        }
+        @keyframes pulseText {
+            0%,
+            100% {
+                opacity: 0.8;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.04);
+            }
+        }
+
+        /* 进度条 */
+        .progress-wrapper {
+            width: 100%;
+            max-width: 460px;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            margin-top: 2px;
+        }
+        .progress-bar-bg {
+            width: 100%;
+            height: 14px;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 30px;
+            overflow: hidden;
+            box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.20);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #ffd93d, #ff9a56, #ff6b6b);
+            border-radius: 30px;
+            transition: width 0.15s linear;
+            box-shadow: 0 0 40px rgba(255, 215, 0, 0.20), 0 0 80px rgba(255, 150, 50, 0.10);
+            position: relative;
+        }
+        .progress-bar-fill::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 10px;
+            right: 10px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.35);
+            border-radius: 10px;
+            filter: blur(1px);
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.9rem;
+            color: rgba(255, 255, 255, 0.80);
+            font-weight: 600;
+            letter-spacing: 2px;
+            padding: 0 4px;
+            text-shadow: 0 2px 12px rgba(0, 0, 0, 0.40);
+        }
+        .progress-label span:last-child {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 1.2rem;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 215, 150, 0.20);
+        }
+
+        /* ===== 选项按钮 — 纯文字 ===== */
+        .choice-buttons {
+            display: flex;
+            gap: 40px;
+            margin-top: 6px;
+            opacity: 0;
+            transform: translateY(20px) scale(0.9);
+            transition: all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+            pointer-events: none;
+        }
+        .choice-buttons.show {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+            pointer-events: auto;
+        }
+
+        .choice-btn {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 3.2rem;
+            padding: 8px 20px;
+            background: none;
+            border: none;
+            box-shadow: none;
+            backdrop-filter: none;
+            -webkit-backdrop-filter: none;
+            color: #fff;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-shadow: 0 4px 30px rgba(0, 0, 0, 0.50), 0 0 60px rgba(255, 255, 255, 0.05);
+            letter-spacing: 6px;
+            min-width: 100px;
+            text-align: center;
+            position: relative;
+        }
+        .choice-btn::after {
+            content: '';
+            position: absolute;
+            bottom: 4px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 3px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+        .choice-btn:hover::after {
+            width: 70%;
+        }
+        .choice-btn:hover {
+            transform: scale(1.08);
+            text-shadow: 0 0 40px rgba(255, 255, 255, 0.2), 0 4px 30px rgba(0, 0, 0, 0.50);
+        }
+        .choice-btn:active {
+            transform: scale(0.95);
+        }
+        .choice-btn.enter-btn {
+            color: #ffd93d;
+        }
+        .choice-btn.enter-btn:hover {
+            color: #ffe680;
+        }
+        .choice-btn.or-btn {
+            color: #ff9a9a;
+        }
+        .choice-btn.or-btn:hover {
+            color: #ffbaba;
+        }
+
+        /* ============================================================
+              页面2: 地图页 (yangwenjing's park)
+            ============================================================ */
+        #map-screen {
+            background: #f9f2e7;
+            padding: 16px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        #map-screen .map-inner {
+            width: 100%;
+            max-width: 1300px;
+            height: 96vh;
+            max-height: 900px;
+            background: linear-gradient(145deg, #fefaf2 0%, #f6efe4 100%);
+            border-radius: 60px 60px 40px 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 0 1px rgba(255, 215, 150, 0.2);
+            padding: 24px 30px 20px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid #fff9f0;
+        }
+        .map-inner .cloud {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 999px;
+            filter: blur(1px);
+            pointer-events: none;
+            z-index: 1;
+        }
+        .map-inner .cloud-1 {
+            width: 160px;
+            height: 50px;
+            top: 20px;
+            right: 40px;
+            box-shadow: 30px -10px 0 20px rgba(255, 255, 255, 0.3), 60px 0 0 10px rgba(255, 255, 255, 0.2);
+        }
+        .map-inner .cloud-2 {
+            width: 200px;
+            height: 60px;
+            bottom: 60px;
+            left: -30px;
+            box-shadow: -20px 10px 0 30px rgba(255, 255, 255, 0.25);
+        }
+
+        .map-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed #e8d5c4;
+            flex-shrink: 0;
+            position: relative;
+            z-index: 10;
+            flex-wrap: wrap;
+            gap: 8px 16px;
+        }
+        .map-title-group {
+            display: flex;
+            align-items: baseline;
+            gap: 14px;
+            flex-wrap: wrap;
+        }
+        .map-main-title {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 2.4rem;
+            color: #6b4f3c;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0 #f0dcc8;
+            line-height: 1.1;
+        }
+        .map-sub-title {
+            font-size: 0.9rem;
+            color: #b5957a;
+            font-weight: 600;
+            background: rgba(255, 215, 150, 0.2);
+            padding: 4px 16px;
+            border-radius: 40px;
+            border: 1px solid #f0dcc8;
+            letter-spacing: 2px;
+        }
+        .map-snow-counter {
+            background: #fffaf2;
+            backdrop-filter: blur(4px);
+            padding: 6px 22px 6px 18px;
+            border-radius: 60px;
+            border: 2px solid #f0dcc8;
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #6b4f3c;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .map-snow-counter span {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #d49b7a;
+            min-width: 36px;
+            text-align: center;
+        }
+        .map-snow-counter .total-hint {
+            font-size: 0.8rem;
+            color: #b5957a;
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        .map-container {
+            flex: 1;
+            position: relative;
+            margin: 14px 0 6px 0;
+            border-radius: 40px;
+            background: radial-gradient(circle at 20% 30%, #e2d8cd, #d6c9bb);
+            box-shadow: inset 0 0 60px rgba(255, 215, 150, 0.1), 0 8px 30px rgba(0, 0, 0, 0.06);
+            overflow: hidden;
+            z-index: 5;
+            border: 3px solid #fff9f0;
+            min-height: 300px;
+            touch-action: none;
+        }
+        .map-container .globe-aura {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 80%;
+            height: 80%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255, 225, 180, 0.15), transparent 70%);
+            border: 1px dashed rgba(255, 215, 150, 0.2);
+            pointer-events: none;
+        }
+        .map-container .drag-hint {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(255, 248, 240, 0.8);
+            backdrop-filter: blur(4px);
+            padding: 8px 24px;
+            border-radius: 60px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: #8a6f5a;
+            border: 1.5px solid #f0dcc8;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+            z-index: 25;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            pointer-events: none;
+            letter-spacing: 1px;
+        }
+        .map-container .drag-hint::before {
+            content: "👆";
+            font-size: 1.2rem;
+        }
+
+        .city-node {
+            position: absolute;
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            transform: translate(-50%, -50%) scale(0.85);
+            opacity: 0.6;
+            z-index: 15;
+            pointer-events: none;
+            background: rgba(255, 248, 240, 0.5);
+            border: 3px solid #dccfc2;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.04);
+            backdrop-filter: blur(2px);
+        }
+        .city-node.locked {
+            filter: grayscale(0.6) brightness(1.1);
+            border-color: #cbb8a8;
+        }
+        .city-node.locked .city-icon {
+            filter: grayscale(0.4);
+        }
+        .city-node.unlocked {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+            pointer-events: auto;
+            background: rgba(255, 248, 240, 0.85);
+            border-color: #f5cba0;
+            box-shadow: 0 8px 30px rgba(213, 150, 108, 0.2), 0 0 0 4px rgba(255, 215, 150, 0.2);
+            animation: floatNode 4s ease-in-out infinite;
+        }
+        .city-node.unlocked .city-icon {
+            font-size: 2.4rem;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.05));
+        }
+        .city-node.unlocked .city-name {
+            color: #4f3a2b;
+            font-weight: 700;
+            background: rgba(255, 248, 240, 0.7);
+            padding: 0 8px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+        }
+        .city-node .city-icon {
+            font-size: 1.8rem;
+            line-height: 1.2;
+            transition: 0.3s;
+        }
+        .city-node .city-name {
+            font-size: 0.65rem;
+            font-weight: 600;
+            color: #7a6452;
+            margin-top: 2px;
+            letter-spacing: 1px;
+            white-space: nowrap;
+            transition: 0.3s;
+        }
+        .city-node .lock-badge {
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+
+        .ripple-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 3px solid #f5cba0;
+            transform: translate(-50%, -50%) scale(1);
+            animation: rippleOut 1.2s ease-out forwards;
+            pointer-events: none;
+        }
+        @keyframes rippleOut {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translate(-50%, -50%) scale(3);
+                opacity: 0;
+            }
+        }
+        @keyframes floatNode {
+            0%,
+            100% {
+                transform: translate(-50%, -50%) scale(1) translateY(0px);
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.06) translateY(-10px);
+            }
+        }
+
+        .snowflake {
+            position: absolute;
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            background: radial-gradient(circle at 30% 30%, #fffcf5, #ffe4c4);
+            box-shadow: 0 0 30px rgba(255, 215, 150, 0.6), 0 0 60px rgba(255, 200, 150, 0.2);
+            cursor: pointer;
+            transition: transform 0.15s, opacity 0.3s;
+            z-index: 20;
+            pointer-events: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            color: #b07d5a;
+            will-change: transform, top, left;
+            border: 2px solid #fff9f0;
+        }
+        .snowflake::after {
+            content: "❄️";
+            font-size: 18px;
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.05));
+        }
+        .snowflake:hover {
+            transform: scale(1.5) !important;
+            box-shadow: 0 0 50px rgba(255, 215, 150, 0.9);
+        }
+        .snowflake.collected {
+            transform: scale(0) rotate(200deg) !important;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        #star-trail {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 12;
+            border-radius: 40px;
+        }
+
+        /* ===== 便签弹窗 ===== */
+        .note-popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.8) rotate(-4deg);
+            background: #fef7ed;
+            padding: 32px 40px 28px;
+            border-radius: 30px 12px 30px 12px;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15), 0 0 0 2px #f0dcc8, 0 0 0 6px #fff9f0;
+            z-index: 999;
+            max-width: 420px;
+            width: 90%;
+            text-align: center;
+            font-size: 1.2rem;
+            font-weight: 600;
+            line-height: 1.8;
+            font-family: 'Gloria Hallelujah', 'Quicksand', cursive;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            opacity: 0;
+            border-left: 8px solid #f5cba0;
+        }
+        .note-popup.show {
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1) rotate(0deg);
+            pointer-events: auto;
+        }
+        .note-popup .note-emoji {
+            font-size: 3.2rem;
+            display: block;
+            margin-bottom: 4px;
+        }
+        .note-popup .note-message {
+            color: #4f3a2b;
+            font-weight: 400;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .note-popup .note-close {
+            margin-top: 16px;
+            font-size: 0.9rem;
+            color: #b5957a;
+            border-top: 2px dashed #e8d5c4;
+            padding-top: 14px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            pointer-events: auto;
+            font-weight: 600;
+            transition: 0.3s;
+        }
+        .note-popup .note-close:hover {
+            color: #6b4f3c;
+        }
+
+        /* ===== 照片墙 Modal ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(107, 79, 60, 0.4);
+            backdrop-filter: blur(8px);
+            z-index: 500;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+        .modal-overlay.open {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        .modal-box {
+            background: #fefaf2;
+            border-radius: 48px 16px 48px 16px;
+            padding: 30px 32px 36px;
+            max-width: 720px;
+            width: 94%;
+            max-height: 80vh;
+            overflow-y: auto;
+            transform: scale(0.9) translateY(20px);
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.15), 0 0 0 2px #f0dcc8, 0 0 0 6px #fff9f0;
+            border: 1px solid #fff;
+        }
+        .modal-overlay.open .modal-box {
+            transform: scale(1) translateY(0);
+        }
+        .modal-box h2 {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 2.2rem;
+            text-align: center;
+            color: #6b4f3c;
+            margin-bottom: 2px;
+            font-weight: 400;
+            letter-spacing: 2px;
+        }
+        .modal-box .city-sub {
+            text-align: center;
+            color: #b5957a;
+            font-size: 0.9rem;
+            margin-bottom: 20px;
+            letter-spacing: 4px;
+            font-weight: 600;
+        }
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 16px;
+        }
+        .photo-grid img {
+            width: 100%;
+            aspect-ratio: 4/3;
+            object-fit: cover;
+            border-radius: 24px 6px 24px 6px;
+            border: 3px solid #fff9f0;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.06);
+            transition: 0.3s;
+        }
+        .photo-grid img:hover {
+            transform: scale(1.02);
+            border-color: #f5cba0;
+        }
+        .modal-close-btn {
+            display: block;
+            margin: 28px auto 0;
+            background: #f5ede4;
+            border: 2px solid #e8d5c4;
+            color: #6b4f3c;
+            padding: 12px 44px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 2px;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .modal-close-btn:hover {
+            background: #f0dcc8;
+            border-color: #d4b8a4;
+        }
+
+        /* ============================================================
+              页面3: 生日页
+            ============================================================ */
+        #birthday-screen {
+            background: linear-gradient(145deg, #fdf6f0 0%, #fce4d6 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .birthday-inner {
+            width: 100%;
+            max-width: 800px;
+            background: rgba(255, 248, 240, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 60px 20px 60px 20px;
+            padding: 40px 36px 50px;
+            text-align: center;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.1), 0 0 0 2px #f5e0d0, 0 0 0 6px #fff9f0;
+            border: 1px solid #fff;
+            position: relative;
+            overflow: hidden;
+        }
+        .birthday-inner::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(255, 215, 150, 0.15), transparent 60%),
+                radial-gradient(circle at 80% 70%, rgba(255, 150, 200, 0.1), transparent 50%);
+            pointer-events: none;
+        }
+
+        .cake-display {
+            font-size: 8rem;
+            line-height: 1.2;
+            filter: drop-shadow(0 12px 40px rgba(255, 150, 100, 0.2));
+            animation: cakeFloat 3s ease-in-out infinite;
+            position: relative;
+            z-index: 2;
+        }
+        @keyframes cakeFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-2deg);
+            }
+            50% {
+                transform: translateY(-12px) rotate(2deg);
+            }
+        }
+
+        .birthday-title {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 3.6rem;
+            color: #6b4f3c;
+            margin: 6px 0 2px;
+            text-shadow: 2px 2px 0 #f0dcc8;
+            position: relative;
+            z-index: 2;
+            letter-spacing: 4px;
+        }
+        .birthday-sub {
+            font-size: 1.1rem;
+            color: #b5957a;
+            font-weight: 600;
+            letter-spacing: 6px;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 18px;
+        }
+
+        .audio-wrapper {
+            margin: 16px auto 8px;
+            position: relative;
+            z-index: 2;
+            max-width: 400px;
+        }
+        .audio-wrapper audio {
+            width: 100%;
+            border-radius: 60px;
+            background: rgba(255, 248, 240, 0.6);
+            border: 2px solid #f0dcc8;
+            outline: none;
+            height: 54px;
+        }
+        .audio-wrapper audio::-webkit-media-controls-panel {
+            background: rgba(255, 248, 240, 0.8);
+            border-radius: 60px;
+        }
+
+        .birthday-message {
+            font-size: 1.1rem;
+            color: #8a6f5a;
+            margin-top: 14px;
+            font-weight: 500;
+            letter-spacing: 2px;
+            position: relative;
+            z-index: 2;
+            line-height: 1.7;
+            padding: 0 10px;
+        }
+        .birthday-message span {
+            font-family: 'Gloria Hallelujah', cursive;
+            font-size: 1.3rem;
+            color: #d49b7a;
+        }
+
+        .back-to-map-btn {
+            margin-top: 22px;
+            background: rgba(255, 215, 150, 0.2);
+            border: 2px solid #f0dcc8;
+            color: #6b4f3c;
+            padding: 10px 36px;
+            border-radius: 60px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            letter-spacing: 3px;
+            font-family: 'Quicksand', sans-serif;
+            position: relative;
+            z-index: 2;
+        }
+        .back-to-map-btn:hover {
+            background: rgba(255, 215, 150, 0.4);
+            border-color: #d4b8a4;
+            transform: scale(1.04);
+        }
+
+        .balloon {
+            position: absolute;
+            font-size: 3rem;
+            opacity: 0.5;
+            animation: balloonFloat 6s ease-in-out infinite;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .balloon:nth-child(1) {
+            top: 8%;
+            left: 6%;
+            animation-delay: 0s;
+            font-size: 3.6rem;
+        }
+        .balloon:nth-child(2) {
+            top: 12%;
+            right: 8%;
+            animation-delay: 1.5s;
+            font-size: 4.2rem;
+        }
+        .balloon:nth-child(3) {
+            bottom: 18%;
+            left: 10%;
+            animation-delay: 3s;
+            font-size: 3rem;
+        }
+        .balloon:nth-child(4) {
+            bottom: 22%;
+            right: 6%;
+            animation-delay: 0.8s;
+            font-size: 3.8rem;
+        }
+        @keyframes balloonFloat {
+            0%,
+            100% {
+                transform: translateY(0) rotate(-6deg);
+            }
+            50% {
+                transform: translateY(-20px) rotate(6deg);
+            }
+        }
+
+        /* ===== 响应式 ===== */
+        @media (max-width: 700px) {
+            #loading-screen {
+                background-attachment: scroll;
+            }
+            .loading-content {
+                padding: 20px 16px 20px;
+                gap: 16px;
+                margin-top: -20px;
+            }
+            .loading-title {
+                font-size: 2.8rem;
+                margin-top: -10px;
+            }
+            .loading-memories {
+                font-size: 1.8rem;
+                margin-top: -2px;
+            }
+            .choice-btn {
+                font-size: 2.4rem;
+                padding: 4px 12px;
+                min-width: 70px;
+            }
+            .choice-buttons {
+                gap: 24px;
+                flex-wrap: wrap;
+                justify-content: center;
+                margin-top: 2px;
+            }
+            .map-inner {
+                padding: 16px 14px 12px;
+                height: 98vh;
+                border-radius: 30px;
+            }
+            .map-main-title {
+                font-size: 1.6rem;
+            }
+            .map-sub-title {
+                font-size: 0.7rem;
+                padding: 2px 12px;
+            }
+            .map-snow-counter {
+                padding: 4px 14px;
+                font-size: 0.9rem;
+            }
+            .map-snow-counter span {
+                font-size: 1.4rem;
+                min-width: 28px;
+            }
+            .city-node {
+                width: 60px;
+                height: 60px;
+            }
+            .city-node .city-icon {
+                font-size: 1.4rem;
+            }
+            .city-node .city-name {
+                font-size: 0.5rem;
+            }
+            .modal-box {
+                padding: 20px 16px;
+            }
+            .photo-grid {
+                grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+                gap: 10px;
+            }
+            .note-popup {
+                padding: 24px 20px;
+                font-size: 1rem;
+                max-width: 300px;
+            }
+            .map-container .drag-hint {
+                font-size: 0.7rem;
+                padding: 4px 16px;
+                bottom: 12px;
+            }
+            .birthday-title {
+                font-size: 2.4rem;
+            }
+            .cake-display {
+                font-size: 5rem;
+            }
+            .birthday-inner {
+                padding: 28px 20px 34px;
+            }
+            .balloon {
+                font-size: 2rem !important;
+            }
+        }
+
+        @keyframes twinkle {
+            0% {
+                opacity: 0.2;
+                transform: scale(0.8);
+            }
+            100% {
+                opacity: 1;
+                transform: scale(1.4);
+            }
+        }
+
+        .modal-box::-webkit-scrollbar {
+            width: 5px;
+        }
+        .modal-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .modal-box::-webkit-scrollbar-thumb {
+            background: #dccfc2;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ============================================================
+    页面1: 加载页
+    ============================================================ -->
+    <div id="loading-screen" class="page active">
+        <div class="particle-container" id="particleContainer"></div>
+        <div class="loading-content">
+            <div class="loading-title">🦪 yangwenjing's park</div>
+            <div class="loading-memories">✨ Loading memories… ✨</div>
+            <div class="progress-wrapper">
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progressFill"></div>
+                </div>
+                <div class="progress-label">
+                    <span>收集回忆中…</span>
+                    <span id="progressText">0%</span>
+                </div>
+            </div>
+            <div class="choice-buttons" id="choiceButtons">
+                <button class="choice-btn enter-btn" id="enterBtn">ENTER</button>
+                <button class="choice-btn or-btn" id="orBtn">OR ?</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    页面2: 地图页 (yangwenjing's park) — 已移除庆祝文字
+    ============================================================ -->
+    <div id="map-screen" class="page">
+        <div class="map-inner">
+            <div class="cloud cloud-1"></div>
+            <div class="cloud cloud-2"></div>
+            <div class="map-header">
+                <div class="map-title-group">
+                    <div class="map-main-title">🦪 yangwenjing's park</div>
+                    <div class="map-sub-title">🎂 26 · 收集雪花 · 解锁回忆</div>
+                </div>
+                <div class="map-snow-counter">
+                    ❄️ 雪花 <span id="snowCount">0</span>
+                    <span class="total-hint">/ 26</span>
+                </div>
+            </div>
+            <div class="map-container" id="mapContainer">
+                <div class="globe-aura"></div>
+                <canvas id="star-trail"></canvas>
+                <div id="cities-wrapper"></div>
+                <div class="drag-hint">拖动地球探索回忆</div>
+                <!-- 已删除 celebration-text 元素 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- ============================================================
+    页面3: 生日页
+    ============================================================ -->
+    <div id="birthday-screen" class="page">
+        <div class="birthday-inner">
+            <div class="balloon">🎈</div>
+            <div class="balloon">🎈</div>
+            <div class="balloon">🎈</div>
+            <div class="balloon">🎈</div>
+            <div class="cake-display">🎂</div>
+            <div class="birthday-title">Happy Birthday</div>
+            <div class="birthday-sub">✨ 26 · 最好的你 ✨</div>
+            <div class="audio-wrapper">
+                <audio controls id="birthdayAudio">
+                    <source src="https://mp3tourl.com/audio/1783260292912-763a43a3-a143-4a3e-866d-1a2cf8262791.wav" type="audio/mpeg" />
+                    您的浏览器不支持音频播放，请更换浏览器。
+                </audio>
+            </div>
+            <div class="birthday-message">
+                <span>🎁 致最珍贵的杨文静：</span><br />
+                我们的生日都在夏天，白昼更长、海水更蓝、夕阳更盛大。<br />
+                在这个能把一切都放大的夏天，祝你的幸福更满溢，未来更盛大，拥有的越来越多……26岁生日快乐！
+            </div>
+            <button class="back-to-map-btn" id="backToMapBtn">✧ GET MEM ORIES ✧</button>
+        </div>
+    </div>
+
+    <!-- ===== 便签弹窗 ===== -->
+    <div class="note-popup" id="notePopup">
+        <span class="note-emoji" id="noteEmoji">🦪</span>
+        <div class="note-message" id="noteMessage">世界是我的牡蛎，你是最美的珍珠。</div>
+        <div class="note-close" onclick="closeNote()">✧ 收下这颗珍珠 ✧</div>
+    </div>
+
+    <!-- ===== 照片墙 Modal ===== -->
+    <div class="modal-overlay" id="photoModal">
+        <div class="modal-box">
+            <h2 id="modalCityName">🏙️ 城市</h2>
+            <div class="city-sub" id="modalCitySub">· 我们的足迹 ·</div>
+            <div class="photo-grid" id="modalPhotoGrid"></div>
+            <button class="modal-close-btn" onclick="closeModal()">✧ 合上记忆 ✧</button>
+        </div>
+    </div>
+
+    <script>
+        // ============================================================
+        //  第一部分: 加载页逻辑 (修复版)
+        // ============================================================
+
+        (function initLoadingScreen() {
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+            const choiceButtons = document.getElementById('choiceButtons');
+            const enterBtn = document.getElementById('enterBtn');
+            const orBtn = document.getElementById('orBtn');
+
+            // 粒子
+            const container = document.getElementById('particleContainer');
+            for (let i = 0; i < 28; i++) {
+                const p = document.createElement('div');
+                p.className = 'particle';
+                const size = 4 + Math.random() * 16;
+                p.style.width = size + 'px';
+                p.style.height = size + 'px';
+                p.style.left = Math.random() * 100 + '%';
+                p.style.animationDuration = 10 + Math.random() * 18 + 's';
+                p.style.animationDelay = Math.random() * 12 + 's';
+                p.style.opacity = 0.10 + Math.random() * 0.25;
+                container.appendChild(p);
+            }
+
+            const startTime = Date.now();
+            const duration = 2800 + Math.random() * 1200;
+            let animationId = null;
+            let isCompleted = false;
+
+            function updateProgress() {
+                const elapsed = Date.now() - startTime;
+                let rawProgress = Math.min((elapsed / duration) * 100, 100);
+                const jitter = Math.sin(elapsed / 500) * 1.5 + Math.random() * 0.5;
+                let displayProgress = Math.min(rawProgress + jitter, 100);
+                if (displayProgress < 0) displayProgress = 0;
+
+                progressFill.style.width = displayProgress + '%';
+                progressText.textContent = Math.floor(displayProgress) + '%';
+
+                if (displayProgress >= 100) {
+                    if (!isCompleted) {
+                        isCompleted = true;
+                        progressFill.style.width = '100%';
+                        progressText.textContent = '100%';
+                        choiceButtons.classList.add('show');
+                    }
+                    return;
+                }
+                animationId = requestAnimationFrame(updateProgress);
+            }
+
+            animationId = requestAnimationFrame(updateProgress);
+
+            // 安全兜底
+            setTimeout(() => {
+                if (!isCompleted) {
+                    progressFill.style.width = '100%';
+                    progressText.textContent = '100%';
+                    choiceButtons.classList.add('show');
+                    isCompleted = true;
+                    if (animationId) cancelAnimationFrame(animationId);
+                }
+            }, 10000);
+
+            function switchToPage(pageId) {
+                document.querySelectorAll('.page').forEach(p => {
+                    p.classList.remove('active', 'exit');
+                    p.style.opacity = '0';
+                    p.style.pointerEvents = 'none';
+                });
+                const target = document.getElementById(pageId);
+                target.classList.add('active');
+                target.style.opacity = '1';
+                target.style.pointerEvents = 'auto';
+                if (pageId === 'map-screen') {
+                    setTimeout(() => { initMap(); }, 100);
+                }
+            }
+
+            enterBtn.addEventListener('click', () => switchToPage('map-screen'));
+            orBtn.addEventListener('click', () => switchToPage('birthday-screen'));
+            document.getElementById('backToMapBtn').addEventListener('click', () => switchToPage('map-screen'));
+            window.switchToPage = switchToPage;
+        })();
+
+
+        // ============================================================
+        //  第二部分: 地图页逻辑 (城市数据更新，移除庆祝文字相关)
+        // ============================================================
+
+        const CITIES = [{
+            id: 'shanghai',
+            name: '上海',
+            icon: '🌃',
+            x: 65,
+            y: 38,
+            photos: [
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqXBqSnR7w34wSS6dB0-iyVDiW2CyhQACeygAApTnUVa6Txh_kAWHzDwE.jpg',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqXZqSnTjGqZ0kPBcIZ7pDpUrqGQLbwACgSgAApTnUVaS93fpj4n8zjwE.jpg',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqXxqSnWeQXpA-HVDhmDZ_K1IWlErLAAChygAApTnUVbKM6MNwZnx-TwE.jpg',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqYFqSnX9WTuWQQyVOnUbR7wyQ9TW_AACjigAApTnUVZ-50tDRqn_bjwE.jpg'
+            ]
+        }, {
+            id: 'nanjing',
+            name: '南京',
+            icon: '🏯',
+            x: 55,
+            y: 48,
+            photos: [
+                'https://free.boltp.com/2026/07/06/6a4a81b6532f6.webp',
+                'https://free.boltp.com/2026/07/06/6a4a81b8692bd.webp',
+                'https://free.boltp.com/2026/07/06/6a4a81ba84bfe.webp',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWtXNqS6Gtm-kOZoYlxh9sTpk4hJIetwACbh0AAkj5WVZhuogFrehhHTwE.jpg'
+            ]
+        }, {
+            id: 'suzhou',
+            name: '苏州',
+            icon: '🏛️',
+            x: 60,
+            y: 55,
+            photos: [
+                'https://free.boltp.com/2026/07/06/6a4a82cdddac3.webp',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqc9qSn-uHYup1iEDG-BYbrDEg0QbvAAC5CgAApTnUVZjW3OsI-vptDwE.jpg',
+                'https://free.boltp.com/2026/07/06/6a4a81511d887.webp',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqeRqSoGjJocmf5QBnMNxOj8IzYw84gAC-ygAApTnUVZ1FHNxyrwkLjwE.jpg'
+            ]
+        }, {
+            id: 'xinyang',
+            name: '信阳',
+            icon: '🌳',
+            x: 48,
+            y: 65,
+            photos: [
+                'https://free.boltp.com/2026/07/06/6a4b9ef851caa.webp',
+                'https://free.boltp.com/2026/07/06/6a4b9ef9ab049.webp',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWtWpqS58ynvTAlqTe0QNTXo5iUNB5ywACYR0AAkj5WVZzHUuMJNB1yTwE.jpg',
+                'https://img.remit.ee/api/file/BQACAgUAAyEGAASHRsPbAAEWqWhqSnOTy4vYGtACU90OAAFa-tDHUhQAAnMoAAKU51FWG_6hGWYSR-08BA.jpg'
+            ]
+        }];
+
+        const NOTE_LIBRARY = [
+            { emoji: '🦪', text: '我们不要在这里，跟我回去18岁，躲到校园杜鹃花丛下，不要被命运找到。' },
+            { emoji: '🗺️', text: '多多见面吧！' },
+            { emoji: '💛', text: '共情力、善良、勇敢、细心，最合拍的你，最好的你。' },
+            { emoji: '❄️', text: '收集26片雪花，拼凑回忆碎片~' },
+            { emoji: '🎂', text: '二十六岁生日快乐！祝热烈，祝自由，祝你所有眼泪都献给幸福。' },
+            { emoji: '🚀', text: '南京、苏州、上海……我们以后一起解锁更多地方~' },
+            { emoji: '🌌', text: '世界很大，幸好有你一起探索。' },
+            { emoji: '✨', text: '愿岁并谢，与长友兮' },
+            { emoji: '🌸', text: '什么都没想，只是觉得夕阳很美，很想看萤火虫，于是就出发了' },
+            { emoji: '☕', text: '想了好久，决定做一个回忆碎片的网页，祝你生日快乐' }
+        ];
+
+        const SNOW_PER_CITY = 3;
+        const TOTAL_SNOW = 26;
+
+        let snowCount = 0;
+        const unlockedCities = new Set();
+        let allUnlocked = false;
+        let cityNodes = {};
+        let snowflakes = [];
+        let isNoteShowing = false;
+        let noteTimeout = null;
+        let mapInitialized = false;
+
+        const mapContainer = document.getElementById('mapContainer');
+        const snowCountEl = document.getElementById('snowCount');
+        const citiesWrapper = document.getElementById('cities-wrapper');
+        const notePopup = document.getElementById('notePopup');
+        const noteMessage = document.getElementById('noteMessage');
+        const noteEmoji = document.getElementById('noteEmoji');
+        const photoModal = document.getElementById('photoModal');
+        const modalCityName = document.getElementById('modalCityName');
+        const modalPhotoGrid = document.getElementById('modalPhotoGrid');
+        const canvas = document.getElementById('star-trail');
+        const ctx = canvas.getContext('2d');
+
+        function initMap() {
+            if (mapInitialized) {
+                setTimeout(() => {
+                    const rect = mapContainer.getBoundingClientRect();
+                    canvas.width = rect.width;
+                    canvas.height = rect.height;
+                    if (allUnlocked) drawStarTrail();
+                }, 100);
+                return;
+            }
+            mapInitialized = true;
+            initCities();
+            initSnowflakes();
+            animateSnowflakes();
+            setTimeout(() => {
+                const rect = mapContainer.getBoundingClientRect();
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }, 200);
+            console.log('🦪 yangwenjing\'s park 已启动！');
+        }
+
+        function initCities() {
+            citiesWrapper.innerHTML = '';
+            CITIES.forEach(city => {
+                const node = document.createElement('div');
+                node.className = 'city-node locked';
+                node.dataset.id = city.id;
+                node.style.left = city.x + '%';
+                node.style.top = city.y + '%';
+                node.innerHTML = `
+                        <span class="city-icon">${city.icon}</span>
+                        <span class="city-name">${city.name}</span>
+                        <span class="lock-badge">🔒</span>
+                    `;
+                node.addEventListener('click', () => {
+                    if (unlockedCities.has(city.id)) {
+                        openCityModal(city);
+                    }
+                });
+                citiesWrapper.appendChild(node);
+                cityNodes[city.id] = node;
+            });
+        }
+
+        function createSnowflake() {
+            if (snowflakes.length >= TOTAL_SNOW) return null;
+            const el = document.createElement('div');
+            el.className = 'snowflake';
+            const rect = mapContainer.getBoundingClientRect();
+            const pad = 30;
+            const left = pad + Math.random() * (rect.width - pad * 2);
+            const top = pad + Math.random() * (rect.height - pad * 2);
+            el.style.left = left + 'px';
+            el.style.top = top + 'px';
+            const size = 20 + Math.random() * 20;
+            el.style.width = size + 'px';
+            el.style.height = size + 'px';
+            const speedX = (Math.random() - 0.5) * 0.3;
+            const speedY = (Math.random() - 0.5) * 0.3 + 0.1;
+            const phase = Math.random() * 100;
+            el._data = { x: left, y: top, speedX, speedY, phase };
+            el.addEventListener('click', (e) => {
+                e.stopPropagation();
+                collectSnowflake(el);
+            });
+            mapContainer.appendChild(el);
+            snowflakes.push(el);
+            return el;
+        }
+
+        function collectSnowflake(el) {
+            if (el.classList.contains('collected')) return;
+            el.classList.add('collected');
+            snowCount++;
+            snowCountEl.textContent = snowCount;
+            if (Math.random() < 0.40 && !isNoteShowing) {
+                showRandomNote();
+            }
+            if (!allUnlocked) {
+                checkUnlockCity();
+            }
+            setTimeout(() => {
+                if (el.parentNode) el.remove();
+                const idx = snowflakes.indexOf(el);
+                if (idx > -1) snowflakes.splice(idx, 1);
+            }, 400);
+        }
+
+        function animateSnowflakes() {
+            const rect = mapContainer.getBoundingClientRect();
+            const pad = 10;
+            snowflakes.forEach(el => {
+                if (el.classList.contains('collected')) return;
+                const d = el._data;
+                if (!d) return;
+                d.x += d.speedX + Math.sin(Date.now() / 2000 + d.phase) * 0.05;
+                d.y += d.speedY + Math.cos(Date.now() / 3000 + d.phase) * 0.04;
+                if (d.x < pad) { d.x = pad;
+                    d.speedX *= -0.5; }
+                if (d.x > rect.width - pad) { d.x = rect.width - pad;
+                    d.speedX *= -0.5; }
+                if (d.y < pad) { d.y = pad;
+                    d.speedY *= -0.5; }
+                if (d.y > rect.height - pad) { d.y = rect.height - pad;
+                    d.speedY *= -0.5; }
+                el.style.left = d.x + 'px';
+                el.style.top = d.y + 'px';
+                const scale = 1 + Math.sin(Date.now() / 1500 + d.phase) * 0.08;
+                el.style.transform = `scale(${scale})`;
+            });
+            requestAnimationFrame(animateSnowflakes);
+        }
+
+        function initSnowflakes() {
+            for (let i = 0; i < TOTAL_SNOW; i++) {
+                setTimeout(() => createSnowflake(), i * 35);
+            }
+        }
+
+        function checkUnlockCity() {
+            if (allUnlocked) return;
+            const locked = CITIES.filter(c => !unlockedCities.has(c.id));
+            if (locked.length === 0) {
+                triggerAllUnlocked();
+                return;
+            }
+            const unlockedCount = unlockedCities.size;
+            const required = (unlockedCount + 1) * SNOW_PER_CITY;
+            if (snowCount >= required && snowCount <= TOTAL_SNOW) {
+                const randomCity = locked[Math.floor(Math.random() * locked.length)];
+                unlockCity(randomCity);
+            }
+        }
+
+        function unlockCity(city) {
+            if (unlockedCities.has(city.id)) return;
+            unlockedCities.add(city.id);
+            const node = cityNodes[city.id];
+            node.classList.remove('locked');
+            node.classList.add('unlocked');
+            node.querySelector('.lock-badge')?.remove();
+            const ring = document.createElement('div');
+            ring.className = 'ripple-ring';
+            node.appendChild(ring);
+            setTimeout(() => ring.remove(), 1300);
+            showFloatingTip(`✨ 解锁了 ${city.icon} ${city.name}！`);
+            if (unlockedCities.size === CITIES.length) {
+                triggerAllUnlocked();
+            }
+        }
+
+        let tipTimeout = null;
+
+        function showFloatingTip(text) {
+            let tip = document.getElementById('floatingTip');
+            if (!tip) {
+                tip = document.createElement('div');
+                tip.id = 'floatingTip';
+                tip.style.cssText = `
+                            position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%);
+                            background: rgba(255, 248, 240, 0.9); backdrop-filter: blur(8px);
+                            padding: 12px 32px; border-radius: 60px;
+                            color: #6b4f3c; font-size: 1.1rem; font-weight: 700;
+                            border: 2px solid #f5cba0; box-shadow: 0 8px 30px rgba(0,0,0,0.06);
+                            z-index: 600; transition: opacity 0.5s, transform 0.5s;
+                            opacity: 0; pointer-events: none; font-family: 'Quicksand', sans-serif;
+                        `;
+                document.body.appendChild(tip);
+            }
+            tip.textContent = text;
+            tip.style.opacity = '1';
+            tip.style.transform = 'translateX(-50%) translateY(0)';
+            clearTimeout(tipTimeout);
+            tipTimeout = setTimeout(() => {
+                tip.style.opacity = '0';
+                tip.style.transform = 'translateX(-50%) translateY(20px)';
+            }, 2500);
+        }
+
+        function triggerAllUnlocked() {
+            if (allUnlocked) return;
+            allUnlocked = true;
+            // 已移除庆祝文字显示，仅保留星星轨迹和撒花效果
+            drawStarTrail();
+            for (let i = 0; i < 60; i++) {
+                setTimeout(() => {
+                    const star = document.createElement('div');
+                    star.style.cssText = `
+                                position: absolute; width: 6px; height: 6px;
+                                background: #f5cba0; border-radius: 50%;
+                                left: ${Math.random()*100}%; top: ${Math.random()*100}%;
+                                box-shadow: 0 0 30px rgba(255,215,150,0.8);
+                                pointer-events: none; z-index: 25;
+                                animation: twinkle 1.2s ease-in-out infinite alternate;
+                            `;
+                    mapContainer.appendChild(star);
+                    setTimeout(() => star.remove(), 4000);
+                }, i * 30);
+            }
+        }
+
+        function drawStarTrail() {
+            const rect = mapContainer.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            const points = CITIES.map(city => {
+                const node = cityNodes[city.id];
+                if (!node) return null;
+                const left = parseFloat(node.style.left) / 100 * rect.width;
+                const top = parseFloat(node.style.top) / 100 * rect.height;
+                return { x: left, y: top };
+            }).filter(p => p !== null);
+            if (points.length < 2) return;
+            let progress = 0;
+            const draw = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.beginPath();
+                ctx.moveTo(points[0].x, points[0].y);
+                for (let i = 1; i < points.length; i++) {
+                    const p0 = points[i - 1],
+                        p1 = points[i];
+                    const cx = (p0.x + p1.x) / 2,
+                        cy = (p0.y + p1.y) / 2 - 20;
+                    ctx.quadraticCurveTo(cx, cy, p1.x, p1.y);
+                }
+                ctx.strokeStyle = 'rgba(245, 203, 160, 0.6)';
+                ctx.lineWidth = 3;
+                ctx.shadowColor = 'rgba(245, 203, 160, 0.6)';
+                ctx.shadowBlur = 30;
+                ctx.stroke();
+                for (let i = 0; i < points.length - 1; i++) {
+                    const p0 = points[i],
+                        p1 = points[i + 1];
+                    const t = (progress + i * 0.12) % 1;
+                    const x = p0.x + (p1.x - p0.x) * t;
+                    const y = p0.y + (p1.y - p0.y) * t - 20 * Math.sin(t * Math.PI);
+                    ctx.beginPath();
+                    ctx.arc(x, y, 7, 0, Math.PI * 2);
+                    ctx.fillStyle = `rgba(255, 255, 255, ${0.6 + 0.4 * Math.sin(t * Math.PI)})`;
+                    ctx.shadowBlur = 50;
+                    ctx.shadowColor = '#f5cba0';
+                    ctx.fill();
+                }
+                progress += 0.007;
+                if (allUnlocked) requestAnimationFrame(draw);
+                else ctx.clearRect(0, 0, canvas.width, canvas.height);
+            };
+            draw();
+        }
+
+        // ===== 便签 =====
+        function showRandomNote() {
+            if (isNoteShowing) return;
+            const data = NOTE_LIBRARY[Math.floor(Math.random() * NOTE_LIBRARY.length)];
+            noteEmoji.textContent = data.emoji;
+            noteMessage.textContent = data.text;
+            notePopup.classList.add('show');
+            isNoteShowing = true;
+            clearTimeout(noteTimeout);
+            noteTimeout = setTimeout(() => closeNote(), 6000);
+        }
+
+        function closeNote() {
+            notePopup.classList.remove('show');
+            isNoteShowing = false;
+            clearTimeout(noteTimeout);
+        }
+        window.closeNote = closeNote;
+
+        // ===== 照片墙 =====
+        function openCityModal(city) {
+            modalCityName.textContent = `${city.icon} ${city.name}`;
+            modalPhotoGrid.innerHTML = '';
+            const validPhotos = city.photos.filter(url => url && url.trim() !== '');
+            if (validPhotos.length === 0) {
+                const placeholder = document.createElement('div');
+                placeholder.style.cssText =
+                    'grid-column:1/-1;text-align:center;padding:40px;color:#b5957a;font-size:1.1rem;';
+                placeholder.textContent = '📷 回忆加载中…';
+                modalPhotoGrid.appendChild(placeholder);
+            } else {
+                validPhotos.forEach(url => {
+                    const img = document.createElement('img');
+                    img.src = url;
+                    img.alt = city.name;
+                    img.loading = 'lazy';
+                    img.onerror = () => {
+                        img.src =
+                            'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="200" height="150" viewBox="0 0 200 150"%3E%3Crect width="200" height="150" fill="%23f0e0d0" /%3E%3Ctext x="50%25" y="50%25" dominant-baseline="middle" text-anchor="middle" fill="%23998070" font-size="16"%3E📷 回忆%3C/text%3E%3C/svg%3E';
+                    };
+                    modalPhotoGrid.appendChild(img);
+                });
+            }
+            photoModal.classList.add('open');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            photoModal.classList.remove('open');
+            document.body.style.overflow = '';
+        }
+        window.closeModal = closeModal;
+
+        photoModal.addEventListener('click', (e) => {
+            if (e.target === photoModal) closeModal();
+        });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') { closeModal();
+                closeNote(); }
+        });
+
+        window.addEventListener('resize', () => {
+            const rect = mapContainer.getBoundingClientRect();
+            canvas.width = rect.width;
+            canvas.height = rect.height;
+            if (allUnlocked) drawStarTrail();
+        });
+
+        window.initMap = initMap;
+        console.log('🎂 yangwenjing\'s park · 26岁生日特别版加载完成！');
+    </script>
+</body>
+</html>
